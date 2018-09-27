@@ -1,1 +1,35 @@
+Local File &Entity_File;
+Local SQL &SQL1;
+Local string &FilePath;
+Local string &ReportPath;
 
+Local string &COMPANY, &START_DT, &END_DT;
+
+&ReportPath = GetEnv("PS_SERVDIR") | "/";
+&FilePath = &ReportPath | "ENTITY_REPORT_" | DC_EMP_CHN_AET.PROCESS_INSTANCE | ".csv";
+
+MessageBox(0, " ", 0, 0, "fOUND pATH");
+
+&Entity_File = GetFile(&FilePath, "W", %FilePath_Absolute);
+If &Entity_File.IsOpen Then
+   
+   &SQL1 = CreateSQL(SQL.DC_ENTITY_TRF_SQL, DC_EMP_CHN_AET.COMPANY, DC_EMP_CHN_AET.START_DT, DC_EMP_CHN_AET.END_DT);
+   
+   /*Write Header Line*/
+   &Header = "ENTITY TRANSFER CSV FILE DATE:" | String(%Date);
+   MessageBox(0, " ", 0, 0, "hEADER");
+   &Entity_File.WriteLine(&Header);
+   &Entity_File.WriteLine("																									Transfer From																																					Transfer To");
+   &Entity_File.WriteLine("Change Type, Effective Date, CoFiCo No., SAP Emp ID, Employee ID, Name, Executive Lvl, 
+   Empl Type, Employment Type, Company, Co Descr, Entity, DeptID, Dept, Dept Name, Position Title, Supv ID, Supervisor, 
+   Cost Center, Company, Co Descr, Entity, DeptID, Dept, Dept Name, Position Title, Supv ID, Supervisor, Cost Center");
+   /* &File.WriteLine("---------------,---------------,-------------,------------------,-----------------,-------------"); */
+   While &SQL1.Fetch(&String)
+      If RTrim(&String, " ") <> "" Then
+         &Entity_File.WriteLine(&String);
+      End-If;
+   End-While;
+Else
+   Error ("File not open");
+End-If;
+&Entity_File.Close();
