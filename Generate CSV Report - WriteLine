@@ -19,10 +19,8 @@ If &Entity_File.IsOpen Then
    &Header = "ENTITY TRANSFER CSV FILE DATE:" | String(%Date);
    MessageBox(0, " ", 0, 0, "hEADER");
    &Entity_File.WriteLine(&Header);
-   &Entity_File.WriteLine("																									Transfer From																																					Transfer To");
-   &Entity_File.WriteLine("Change Type, Effective Date, CoFiCo No., SAP Emp ID, Employee ID, Name, Executive Lvl, 
-   Empl Type, Employment Type, Company, Co Descr, Entity, DeptID, Dept, Dept Name, Position Title, Supv ID, Supervisor, 
-   Cost Center, Company, Co Descr, Entity, DeptID, Dept, Dept Name, Position Title, Supv ID, Supervisor, Cost Center");
+   &Entity_File.WriteLine("Transfer From	-  Transfer To");
+   &Entity_File.WriteLine("Change Type, Effective Date, CoFiCo No., SAP Emp ID, Employee ID, Name, Executive Lvl,Empl Type, Employment Type, Company, Co Descr, Entity, DeptID, Dept, Dept Name, Position Title, Supv ID, Supervisor, Cost Center, Company, Co Descr, Entity, DeptID, Dept, Dept Name, Position Title, Supv ID, Supervisor, Cost Center");
    /* &File.WriteLine("---------------,---------------,-------------,------------------,-----------------,-------------"); */
    While &SQL1.Fetch(&String)
       If RTrim(&String, " ") <> "" Then
