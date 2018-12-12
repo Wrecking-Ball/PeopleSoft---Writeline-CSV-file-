@@ -65,4 +65,22 @@ Defining the table -
 
 Appending with Message Property(for the example given above)-
 &oNotif.Message = &oGenericTemplate.Text |&sMailLine2; /* Message text defined in Generic template */
+
+***************************************************************************************************************************************
+We can use the FileNames and FileTitles properties for sending attachments – both accept arrays.
+FileNames will have the absolute path of the file(s) to be attached.
+FileTitles will have the name(s) with which these attachment(s) would be shown in the email.
+
+Please add the following code before &oNotif.Send().
+
+/* Code to send Attachment along with generic template */
+Local array of string &aFileNames = CreateArrayRept("", 0);
+Local array of string &aFileTitles = CreateArrayRept("", 0);
+ 
+   /* Attachments */
+   &sAbsFileName = "absolute/file/path/filename.pdf";
+   &aFileNames.Push(&sAbsFileName);
+   &aFileTitles.Push("file-name-appering-in-email.pdf");
+   &oNotif.FileTitles = &aFileTitles;
+   &oNotif.FileNames = &aFileNames;
  
