@@ -1,7 +1,9 @@
 By setting up Generic templates from PIA and using Notification classes along with it , an email notification can be triggered in
 PeopleSoft that also in multiple languages.We can add as many bind variable as we want within the message text which we will be pushing
 through the PeopleCode using an array.
+
 We will be using PT_WF_NOTIFICATION package and Notification Template class to specify a Generic Template.
+
 Sending Email - PeopleCode
 ***************************************************************************************************************************************
 /* import the delivered Notification package */
@@ -47,3 +49,16 @@ Local PT_WF_NOTIFICATION:Notification &oNotif;
 /* send email */
 &oNotif.Send();
 ***************************************************************************************************************************************
+
+NOTE: 
+1. The NotifyFrom doesn't work correctly because it seems to be a bug in the Notification class. So instead 'EmailReplyTo' property has 
+been used through which the system consider the sender's email.
+
+2.If you want a dynamic table or something similar, you can generate it as shown here and append it to the Message property.
+Defining the table -
+&sMailLine2 = "<br><table border='1'><tr bgcolor = '#AAAA00' ><th>Name</th><th>State</th><th>Country</th></tr><tr><td>RojerAlex</td>
+<td>VA</td><td>USA</td></tr></table><br>";
+
+Appending with Message Property(for the example given above)-
+&oNotif.Message = &oGenericTemplate.Text |&sMailLine2; /* Message text defined in Generic template */
+ 
