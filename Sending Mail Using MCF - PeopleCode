@@ -1,2 +1,61 @@
 Here we will code for sending email notification without using generic template , Using Multi Channel Framework.
-Using MCFOutBoundEmail Class we will be sending HTML emails.This method have several methods which comes in handy to send emails in PeopleSoft.
+Using MCFOutBoundEmail Class we will be sending HTML emails.This method have several methods which comes in handy to send emails in 
+PeopleSoft.Although we will only be using the send method here, one can have a look at other methods like AddAttachment and AddHeader
+in PeopleBooks.
+Firstly we need to import the MCFOutboundEmail class and instantiate it. Then use the delivered properties to assign the sender, 
+recipients etc. We can then build an HTML text and assign it to the Text property. Finally use the Send() method to send the email.
+
+*****************************************************************************************************************************************
+import PT_MCF_MAIL:MCFOutboundEmail;
+ 
+Local PT_MCF_MAIL:MCFOutboundEmail &oEmail = create PT_MCF_MAIL:MCFOutboundEmail();
+ 
+&oEmail.From = %EmailAddress;
+&oEmail.Recipients = "rakeshsgk@gmail.com";
+ 
+/* Building the HTML text */
+&sNL = "<br>";
+&sGreetLine = "<font face ='Arial'>Dear " | %OperatorId | "," | &sNL | &sNL;
+ 
+&sMailLine1 = "This is a test email that contains an HTML table." | &sNL | &sNL;
+&sMailLine2 = "<table border='1'><tr bgcolor = '#AAAA00' ><th>Name</th><th>State</th><th>Country</th></tr><tr><td>RojerAlex</td>
+<td>VA</td><td>USA</td></tr></table>" | &sNL;
+ 
+&sFooterText1 = "Your footer line(s) goes here." | &sNL | &sNL;
+&sFooterText2 = "Regards," | &sNL | "The PSoftSearch team";
+&sFooter = &sFooterText1 | &sFooterText2 | "</font>";
+ 
+&sEmailBody = &sGreetLine | &sMailLine1 | &sMailLine2 | &sFooter;
+&oEmail.Subject = "Test Email";
+&oEmail.Text = &sEmailBody;
+ 
+/* Setting the Content type */
+&oEmail.ContentType = "text/html; charset=US-ASCII";
+ 
+/* Sending the email */
+&nStatus = &oEmail.Send();
+***************************************************************************************************************************************
+
+We can add other html tags to make the email look nicer.
+/** Error Checking **/
+The return value from the Send() method can provide some insight into what has happened during the send operation. The below shows all 
+the return values.
+-1    - Email was sent but whether it was successful or not is not known.
+0	    - Email failed before being sent.
+1	    - Email was delivered.
+2	    - Email delivery not attempted.
+3	    - Email has only been partially delivered. Only some of the addresses in the list of addresses were delivered to.
+***************************************************************************************************************************************
+You can evaluate the return value to show the user a message – a basic one is shown below.
+Evaluate &nStatus
+When 1
+   WinMessage("Email successfully sent.", 0);
+   Break;
+When-Other
+   WinMessage("Error(s) Encountered.", 0);
+   Break;
+End-Evaluate;
+***************************************************************************************************************************************
+
+There are several ways of sending HTML emails from PeopleSoft. Using the MCFOutboundEmail class is one of the options which is easy to 
+use while giving you a high degree of flexibility.
