@@ -1,0 +1,2 @@
+Here we will code for sending email notification without using generic template , Using Multi Channel Framework.
+Using MCFOutBoundEmail Class we will be sending HTML emails.This method have several methods which comes in handy to send emails in PeopleSoft.
