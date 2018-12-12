@@ -1,4 +1,4 @@
-Using Generic template is a helpful way to give your user the ability to customise email text. PT_WF_NOTIFICATION is the app package
+Using Generic template is a helpful way to give the user the ability to customise email text. PT_WF_NOTIFICATION is the app package
 that contains all the classes you need to do this. This method also provides muti-language support. As Generic templates are not managed
 objects, you will need to write Data Mover Scripts to copy these across to other instances.
 
