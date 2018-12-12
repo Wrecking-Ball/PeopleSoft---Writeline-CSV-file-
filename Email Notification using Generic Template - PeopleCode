@@ -1,0 +1,47 @@
+By setting up Generic templates from PIA and using Notification classes along with it , an email notification can be triggered in PeopleSoft that also in multiple languages.We can add as many bind variable as we want within the message text which we will be pushing through the PeopleCode using an array.
+We will be using PT_WF_NOTIFICATION package and Notification Template class to specify a Generic Template.
+Sending Email - PeopleCode
+***************************************************************************************************************************************
+/* import the delivered Notification package */
+import PT_WF_NOTIFICATION:*;
+ 
+Local array of string &aBindVariables; /* variable for array */
+Local array of PT_WF_NOTIFICATION:NotificationAddress &oNotifyTo;
+Local PT_WF_NOTIFICATION:NotificationAddress &oNotifyAddr;
+Local PT_WF_NOTIFICATION:Notification &oNotif;
+ 
+/* Create an array of to-email ids for the Notification class */
+&oNotifyTo = CreateArrayRept(&oNotifyAddr, 0);
+&sToEmail = "xxxxxxxx@gmail.com"; /* Receiver's Email */
+ 
+/* NotificationAddress(Oprid(Receiver), Description, Language, to-email-id, Channel) */
+&oNotifyAddr = create PT_WF_NOTIFICATION:NotificationAddress("", "", "", &sToEmail, "Email");
+&oNotifyTo.Push(&oNotifyAddr);
+ 
+/* instantiate the NotificationTemplate class */
+/* NotificationTemplate(component-name, component-market, Generic-template-name, G = Generic Teplate) */
+&oGenericTemplate = create PT_WF_NOTIFICATION:NotificationTemplate("", "", "R9_EMAIL_TEST", "G");
+ 
+/* create an array of all bind variables */
+&aBindVariables = CreateArrayRept("", 0);
+&aBindVariables.Push("John Smith"); /* Pushing bind variable for the generic template */
+&aBindVariables.Push("Rakesh");
+ 
+/* use the array of bind variables to populate the generic template */
+&xmlVars = &oGenericTemplate.SetupGenericVars(&aBindVariables);
+&oGenericTemplate.GetAndExpandTemplate(%Language, &xmlVars);
+ 
+/* instantiate the Notification class */
+/* Notification(Notify-from-email-id, date-time, language) */
+&oNotif = create PT_WF_NOTIFICATION:Notification("ps@psoftsearch.com", %Date + %PerfTime, %Language);
+ 
+/* set properties */
+&oNotif.ContentType = "Content-type: text/html; charset=US-ASCII";
+&oNotif.NotifyTo = &oNotifyTo;
+&oNotif.EmailReplyTo = "ps@psoftsearch.com"; /* sender defined in Generic template */
+&oNotif.Subject = &oGenericTemplate.Subject; /*Subject defined in Generic template */
+&oNotif.Message = &oGenericTemplate.Text; /* Message text defined in Generic template */
+ 
+/* send email */
+&oNotif.Send();
+***************************************************************************************************************************************
